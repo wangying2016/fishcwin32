@@ -1,0 +1,14 @@
+0.操作系统是提供给程序员各种环境和函数的，可供程序员完成各种功能
+1.操作系统提供给程序员的所有东西都在SDK里面，学习SDK可以追本溯源
+2.
+a. int型表示年龄
+b. 以0结束的字符串我的名字
+c. 指向缓存的指针
+d. MSG结构的变量
+e. 窗口的句柄
+f. ？？？不清楚
+
+0.MessageBox(NULL, TEXT("这是我在鱼C学的第一个程序"), TEXT("打招呼"), MB_ABORTRETRYIGNORE);
+1.if (IDOK == MessageBox(NULL, TEXT("你真的忍心把我关闭吗？！"), TEXT("鱼C工作室"), MB_OKCANCEL | MB_ICONQUESTION)) {
+
+	}

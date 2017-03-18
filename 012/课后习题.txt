@@ -1,0 +1,60 @@
+0. ScrollBar
+1. 不会
+2. GetClientRect() GetSystemMetrics() LOWORD(lParam) HIWORD(lParam)
+3. LOWORD(lParam) HIWORD(lParam)
+4. LOWORD(lParam) HIWORD(lParam)
+5. 没有在相应位置写上WS_VSCROLL WS_HSCROLL
+
+0.
+LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	HDC hdc;
+	PAINTSTRUCT ps;
+	RECT rect;
+	size_t iTarget;
+	static int cxClient, cyClient;
+	TCHAR szBuffer[128];
+
+	switch (message)
+	{
+	case WM_SIZE:
+		cxClient = LOWORD(lParam);
+		cyClient = HIWORD(lParam);
+		hdc = GetDC(hwnd);
+		StringCchPrintf(szBuffer, 128, TEXT("客户区当前的分辨率为%d * %d px"), cxClient, cyClient);
+		StringCchLength(szBuffer, 128, &iTarget);
+		TextOut(hdc, 10, 10, szBuffer, iTarget);
+		if (cxClient < 800 || cyClient < 600) {
+			MessageBox(NULL, TEXT("客户区尺寸过小，有些内容可能无法显示......"), TEXT("提示"), MB_OK);
+		}
+		ReleaseDC(hwnd, hdc);
+		return 0;
+
+	case WM_PAINT:
+		hdc = BeginPaint(hwnd, &ps);
+		GetClientRect(hwnd, &rect);
+		DrawText(hdc, TEXT("大家好，这是我的第一个窗口程序！"), -1, &rect,
+			DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+		EndPaint(hwnd, &ps);
+		return 0;
+
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
+	}
+
+	return DefWindowProc(hwnd, message, wParam, lParam);
+}
+1.
+case WM_SIZE:
+		switch (wParam)
+		{
+		case SIZE_MAXIMIZED:
+			MessageBox(NULL, TEXT("最大化"), TEXT("提示"), MB_OK);
+			break;
+
+		case SIZE_MINIMIZED:
+			MessageBox(NULL, TEXT("最小化"), TEXT("提示"), MB_OK);
+			break;
+		}
+		return 0;

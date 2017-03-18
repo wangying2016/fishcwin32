@@ -1,0 +1,16 @@
+0.
+定义窗口类WNDCLASS->注册窗口类RegisterClass->创建窗口CreateWindow->操作返回句柄，
+显示窗口ShowWindow->更新窗口UpdateWindow->进入消息循环（GetMessage->TranslateMessage->
+DispatchMessage）
+1.
+CreateWindow
+2.
+当GetMessage获取到了WM_QUIT消息后，就返回0，导致while循环退出
+3.
+句柄是指针，是指向指针的指针，16位无符号整型
+4.
+不能，窗口都显示不出来了
+5.
+不是，是交付给操作系统，由操作系统带着消息找消息函数响应
+6.
+发送WM_LBUTTONDOWN消息，然后翻译成字符，分发到应用程序的消息响应函数

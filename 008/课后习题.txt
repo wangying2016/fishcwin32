@@ -1,0 +1,37 @@
+0. kenel gdi user
+1. 拿到系统的设备环境
+2. hdc = BeginPaint(hwnd, &ps);
+   ...
+   EndPaint(hwnd, &ps);
+
+   hdc = GetDC(hwnd);
+   ...
+   ReleaseDC(hwnd, hdc);   
+3. DrawText不能灵活的定位显示位置
+4. 不知道
+
+0. 定位是一件比较复杂的事情
+
+1.
+hdc = BeginPaint(hwnd, &ps);
+GetWindowRect(hwnd, &rect);
+SetTextAlign(hdc, GetTextAlign(hdc) | TA_CENTER);
+TextOut(hdc, (rect.right - rect.left) / 2, (rect.bottom - rect.top) / 2, TEXT("I Love FishC.com!"), 17);
+EndPaint(hwnd, &ps);
+
+2.
+hdc = BeginPaint(hwnd, &ps);
+		TextOut(hdc, 20, 20, TEXT("九九乘法表"), 5);
+		int x = 20;
+		int y = 20;
+		for (int row = 1; row < 10; ++row) {
+			y += 20;
+			x = 20;
+			for (int col = 1; col <= row; ++col) {
+				TCHAR text[32];
+				wsprintf(text, TEXT("%d * %d = %d"), row, col, row * col);
+				TextOut(hdc, x, y, text, wcslen(text));
+				x += 100;
+			}
+		}
+		EndPaint(hwnd, &ps);

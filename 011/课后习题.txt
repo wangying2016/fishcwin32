@@ -1,0 +1,137 @@
+0. 就是在实际编程的过程中，可以忽略掉显示设备的差异，进行无差异编程，内部自有转换处理的
+机制
+1. GetSystemMetrics()函数，根据标记的宏定义，获取各个属性值
+2. 不行，整型数的除法默认为去尾除法
+
+0. 
+case WM_CREATE:
+		GetClientRect(hwnd, &rect);
+		int cxScreen = rect.right - rect.left;
+		int cyScreen = rect.bottom - rect.top;
+		if (cxScreen < 800 || cyScreen < 600) {
+			TCHAR szBuffer[256];
+			StringCchPrintf(szBuffer, 256, TEXT("抱歉，您当前客户区的分辨率（%d * %d）不达标，请调整窗口大小或最大化窗口") \
+				, cxScreen, cyScreen);
+			MessageBox(NULL, szBuffer, TEXT("提示"), MB_OK);
+			cxScreen = GetSystemMetrics(SM_CXSCREEN);
+			cyScreen = GetSystemMetrics(SM_CYSCREEN);
+			if (cxScreen < 800 || cyScreen < 600) {
+				MessageBox(NULL, TEXT("请升级设备"), TEXT("提示"), MB_OK);
+			}
+			else {
+				MessageBox(NULL, TEXT("请最大化窗口"), TEXT("提示"), MB_OK);
+			}
+		}
+		return 0;
+
+1.
+case WM_PAINT:
+		hdc = BeginPaint(hwnd, &ps);
+		GetClientRect(hwnd, &rect);
+		int textX = 0;
+		int textY = 0;
+		size_t iTarget = 0;
+		// 绘制North
+		StringCchLength(szBuffer[0], 128, &iTarget);
+		textX = (rect.right - rect.left - iTarget * cxAveChar) / 2;
+		textY = cxAveChar;
+		TextOut(hdc, textX, textY, szBuffer[0], iTarget);
+		// 绘制West
+		StringCchLength(szBuffer[1], 128, &iTarget);
+		textX = cxAveChar;
+		textY = (rect.bottom - rect.top - cyChar) / 2;
+		TextOut(hdc, textX, textY, szBuffer[1], iTarget);
+		// 绘制East
+		StringCchLength(szBuffer[3], 128, &iTarget);
+		textX = rect.right - rect.left - cxAveChar * (iTarget + 1);
+		textY = (rect.bottom - rect.top - cyChar) / 2;
+		TextOut(hdc, textX, textY, szBuffer[3], iTarget);
+		// 绘制South
+		StringCchLength(szBuffer[4], 128, &iTarget);
+		textX = (rect.right - rect.left - iTarget * cxAveChar) / 2;
+		textY = rect.bottom - rect.top - cyChar - cxAveChar;
+		TextOut(hdc, textX, textY, szBuffer[4], iTarget);
+		// 绘制Center
+		StringCchLength(szBuffer[2], 128, &iTarget);
+		textX = (rect.right - rect.left - iTarget * cxAveChar) / 2;
+		textY = (rect.bottom - rect.top - cyChar) / 2;
+		TextOut(hdc, textX, textY, szBuffer[2], iTarget);
+
+		EndPaint(hwnd, &ps);
+		return 0;
+
+2.
+LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	HDC hdc;
+	PAINTSTRUCT ps;
+	RECT rect;
+	static int cyChar,cxChar;
+	TEXTMETRIC tm;
+	static TCHAR *poetry[] = {
+		TEXT("I Think I Can"),
+		TEXT(""),
+		TEXT("If you think you are beaten, you are;"),
+		TEXT("If you think you dare not, you don't;"),
+		TEXT("If you want to win but think you can't;"),
+		TEXT("It's almost a cinch you won't."),
+		TEXT("If you think you'll lose, you're lost;"),
+		TEXT("For out of the world we find;"),
+		TEXT("Success begins with a fellow's will;"),
+		TEXT("It's all in a state of mind."),
+		TEXT("Life's battles don't always go;"),
+		TEXT("To the stronger and faster man;"),
+		TEXT("But sooner or later the man who wins;"),
+		TEXT("Is the man who thinks he can.")
+	};
+
+
+	switch (message)
+	{
+	case WM_CREATE:
+		hdc = GetDC(hwnd);
+		GetTextMetrics(hdc, &tm);
+		cyChar = tm.tmHeight + tm.tmExternalLeading;
+		cxChar = tm.tmAveCharWidth;
+		ReleaseDC(hwnd, hdc);
+
+	case WM_PAINT:
+		hdc = BeginPaint(hwnd, &ps);
+		GetClientRect(hwnd, &rect);
+		// 获取最长行的长度和总行数
+		int totalCount = sizeof(poetry) / sizeof(poetry[0]);
+		int maxLength = 0;
+		for (int count = 0; count < totalCount; ++count) {
+			int	tempLength = maxLength;
+			StringCchLength(poetry[count], 256, &tempLength);
+			if (tempLength > maxLength) {
+				maxLength = tempLength;
+			}
+		}
+		// 计算起始高度
+		int startY = (rect.bottom - rect.top - totalCount * cyChar) / 2;
+		int startX = (rect.right - rect.left - maxLength * cxChar) / 2;
+		// 打印诗词
+		for (int item = 0; item < totalCount; ++item) {
+			size_t iTarget = 0;
+			StringCchLength(poetry[item], 256, &iTarget);
+			if (item == 0) {
+				SetTextAlign(hdc, TA_CENTER);
+				TextOut(hdc, (rect.right - rect.left) / 2, startY, poetry[item], iTarget);
+			}
+			else {
+				SetTextAlign(hdc, TA_LEFT);
+				startY += cyChar;
+				TextOut(hdc, startX, startY, poetry[item], iTarget);
+			}
+		}
+		EndPaint(hwnd, &ps);
+		return 0;
+
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
+	}
+
+	return DefWindowProc(hwnd, message, wParam, lParam);
+}

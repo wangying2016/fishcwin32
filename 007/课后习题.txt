@@ -1,0 +1,31 @@
+0.夯实基础，推荐小甲鱼
+
+1.B->C->D-A
+
+2.WM_CLOSE
+
+3.并不是我们调用了API，而是系统调用了API
+
+4.返回到DispatchMessage函数
+
+5.应用程序消息队列
+
+6.总控制权在操作系统手中，操作系统会轮流
+询问每一个任务是否需要使用 CPU ，需要使用
+的话就让它用，不过在一定时间后，操作系统会
+剥夺当前任务的 CPU 使用权，把它排在询问队
+列的最后，再去询问下一个任务
+
+0.
+case WM_CLOSE:
+MessageBox(hwnd, TEXT("你不能关闭我"), TEXT("警告"), MB_ICONERROR);
+return 0;
+
+1.
+case WM_LBUTTONUP:
+if (100 <= GET_X_LPARAM(lParam) && 200 >= (lParam) && 100 <= GET_Y_LPARAM(lParam) && 200 >= GET_Y_LPARAM(lParam)) {
+	if (IDOK == MessageBox(hwnd, TEXT("这都让你找到了，点击确认关闭程序"), TEXT("厉害"), MB_OK)) {
+		DestroyWindow(hwnd);
+	}
+}
+return 0;

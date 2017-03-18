@@ -1,0 +1,22 @@
+0. 每次移动滚动条，都要刷新全部区域
+1. 这样做的话，可以提高代码的兼容性
+2. 方便向后兼容
+3. 
+SCROLLINFO si;
+si.fMask = SIF_DISABLENOSCROLL;
+SetScrollInfo(hwnd, SB_HORZ, &si, TRUE);
+4. SCROLLINFO结构的nPage大小会影响滑块的大小
+5. 
+SCROLLINFO si;
+GetScrollInfo(hwnd, SB_VERT, &si);
+si.nMax - si.nMin
+6. 第三个参数指定的客户区内容可以高效的滚动
+0.
+已经更换了
+1.
+RECT rect;
+			rect.left = 0;
+			rect.top = 0;
+			rect.right = 100;
+			rect.bottom = yClient;
+			ScrollWindow(hwnd, 0, yChar * (yPos - si.nPos), NULL, &rect);

@@ -1,0 +1,46 @@
+0. 是在CreateWindow函数调用
+1. 不怕，数据区不一样
+2. 一般相应客户区产生的消息
+3. 设备上下文、设备环境，Device Context
+4. 左上角x, y,右下角x , y
+5. 绘制一个空白的背景
+6. 0x00000000
+
+0.
+case WM_LBUTTONDOWN:
+		MessageBox(hwnd, TEXT("按击来自主人的食指"), TEXT("好舒服~"), MB_OK);
+		return 0;
+
+case WM_RBUTTONDOWN:
+		MessageBox(hwnd, TEXT("感受到来自主人中指的力量"), TEXT("好舒服~"), MB_OK);
+		return 0;
+1.
+case WM_LBUTTONUP:
+	if (wParam == MK_RBUTTON) {
+		MessageBox(hwnd, TEXT("左右开弓，旗开得胜"), TEXT("好舒服~"), MB_OK);
+	}
+	return 0;
+2.
+case WM_PAINT:
+		hdc = BeginPaint(hwnd, &ps);
+		GetClientRect(hwnd, &rect);
+		TCHAR text[256] = TEXT("");
+		if (m_iPaintTimes == 0) {
+			wcscpy(text, TEXT("嗨，我是一个窗口，主人刚刚把我做出来了。"));
+		}
+		else {
+			wcscpy(text, TEXT("噢，我被重绘了"));
+			wchar_t times[64] = { 0 };
+			swprintf(times, 63, L"%d", m_iPaintTimes);
+			wcscat(text, times);
+			wcscat(text, TEXT("次！"));
+		}
+		DrawText(hdc, text, -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+		EndPaint(hwnd, &ps);
+		m_iPaintTimes++;
+		return 0;
+3.
+DrawText(hdc, text, -1, &rect, DT_CENTER | DT_WORDBREAK);
+
+4.
+DrawText(hdc, text, -1, &rect, DT_CENTER | DT_VCENTER | DT_WORD_ELLIPSIS);

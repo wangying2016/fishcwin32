@@ -1,0 +1,43 @@
+0. 面向对象
+1. 在windows的世界里面，处处都是窗口，窗口里面的每个子窗口元素，也是窗口
+2. windows系统调用
+3. 看了下，并没有什么不同
+#define CALLBACK __stdcall
+#define WINAPI __stdcall
+#define APIENTRY WINAPI
+4. 前者定义通用的基本类型，后者定义具体的对象的实现，有助于后期的功能的增加管理
+5. windows窗口的诞生，首先注册WNDCLASS类，然后注册这个窗口类，此时定义了基本属性，然后创建这个窗口，
+定义更多的具体属性，然后显示窗口，更新窗口，进入消息循环
+
+0.
+创建窗口的时候，将窗口类型风格设置为WS_DISABLED
+hwnd = CreateWindow(szAppName, 
+		TEXT("鱼C工作室"), 
+		WS_DISABLED,
+		CW_USEDEFAULT, 
+		CW_USEDEFAULT, 
+		CW_USEDEFAULT, 
+		CW_USEDEFAULT,
+		NULL, 
+		NULL, 
+		hInstance, 
+		NULL);
+
+1. 
+创建窗口的时候，加上WS_HSCROLL和WS_VSCROLL
+hwnd = CreateWindow(szAppName, 
+		TEXT("鱼C工作室"), 
+		WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL,
+		CW_USEDEFAULT, 
+		CW_USEDEFAULT, 
+		CW_USEDEFAULT, 
+		CW_USEDEFAULT,
+		NULL, 
+		NULL, 
+		hInstance, 
+		NULL);
+2. 
+不知道
+
+3.
+不知道

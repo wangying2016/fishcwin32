@@ -1,0 +1,47 @@
+0. ASCII字符集和ANSI编码
+1. 忽略编码环境
+2. 
+#include <stdio.h>
+#include <wchar.h>
+#include <locale.h>
+
+int main() 
+{
+	wchar_t c = L'中';
+
+	setlocale(LC_ALL, "Chs");
+	wprintf(L"%lc\n", c);
+
+	return 0;
+}
+3. 指针和数组
+4. 显示  确认和取消
+
+0.
+#include <windows.h>
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
+{
+	BOOLEAN flag = TRUE;
+	int seeresult = -1;
+	int retryresult = -1;
+
+	while (flag) {
+		seeresult = MessageBox(NULL, TEXT("你看见消息框吗？"), TEXT("提示"), MB_YESNO);
+		if (IDYES == seeresult) {
+			MessageBox(NULL, TEXT("嗯，看见就好"), TEXT("提示"), MB_OKCANCEL);
+			retryresult = MessageBox(NULL, TEXT("重试吗？"), TEXT("提示"), MB_RETRYCANCEL);
+			if (IDRETRY == retryresult) {
+				continue;
+			} else {
+				break;
+			}
+		}
+		else {
+			MessageBox(NULL, TEXT("你睁大眼睛仔细瞧瞧，我就是消息框啊！"), TEXT("提示"), MB_OKCANCEL);
+			continue;
+		}
+	}
+
+	return 0;
+}

@@ -1,0 +1,20 @@
+0. StringCchPrintf()传入的是字符的个数；StringCbPrintf()传入的是字节的个数
+1. StringCchPrintf()限定了最大允许的字符数
+2. size_t就是无符号整型
+3. I Love FishC.
+4. 缓存区装不下那么多字符
+
+0. 不知道为什么
+1. hdc = BeginPaint(hwnd, &ps);
+		GetClientRect(hwnd, &rect);
+		SetTextAlign(hdc, GetTextAlign(hdc) | TA_CENTER);
+		TCHAR one[64] = TEXT("no zuo no die");
+		TCHAR two[32] = TEXT("why you try");
+		if (!SUCCEEDED(StringCchCat(one, 64, two))) {
+			MessageBox(hwnd, TEXT("合并失败"), TEXT("提示"), MB_ICONERROR);
+			return 0;
+		}
+		StringCchLength(one, 64, &iTarget);
+		TextOut(hdc, (rect.right - rect.left) / 2, (rect.bottom - rect.top) / 2, one, iTarget);
+		EndPaint(hwnd, &ps);
+2. 略
