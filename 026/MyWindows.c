@@ -6,9 +6,6 @@
 #include <windows.h>
 #include <math.h>
 
-#define PI 3.141592
-#define NUM 1000
-
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
@@ -66,7 +63,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	RECT rect;
 	static int cxClient, cyClient;
 	int iMapMode = 0;
-	POINT apt[NUM];
 
 	switch (message)
 	{
@@ -88,12 +84,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		SetMapMode(hdc, MM_LOMETRIC);
 		SetViewportOrgEx(hdc, 0, cyClient / 2, NULL);
 		
-		
-		for (int i = 0; i < NUM; ++i) {
-			apt[i].x = 2 * cxClient * i / NUM;
-			apt[i].y = cyClient / 2 * sin(2 * PI * i / NUM);
+		MoveToEx(hdc, -cxClient / 2, 0, NULL);
+		for (double x = -cxClient / 2; x < cxClient / 2; x += 0.01) {
+			LineTo(hdc, x * 200, sin(x) * 300);
 		}
-		PolylineTo(hdc, apt, NUM);
 
 
 		EndPaint(hwnd, &ps);
