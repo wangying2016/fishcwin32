@@ -92,12 +92,16 @@ void DrawRectangle(HWND hwnd)
 	HDC hdc;
 	RECT rect;
 
+	if (cxClient == 0 || cyClient == 0) {
+		return;
+	}
+
 	SetRect(&rect, rand() % cxClient, rand() % cyClient, rand() % cxClient, rand() % cyClient);
 	hBrush = CreateSolidBrush(RGB(rand() % 256, rand() % 256, rand() % 256));
 
 	hdc = GetDC(hwnd);
 	FillRect(hdc, &rect, hBrush);
 
-	DeleteObject(hBrush);
 	ReleaseDC(hwnd, hdc);
+	DeleteObject(hBrush);
 }
